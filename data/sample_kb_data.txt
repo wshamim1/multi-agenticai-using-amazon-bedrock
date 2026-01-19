@@ -36,7 +36,7 @@ AWS Services Used:
 - AWS IAM: Identity and access management
 
 Foundation Models:
-- Primary Model: Meta Llama 3.3 70B Instruct
+- Primary Model: Amazon Nova Pro 1.0
 - Embedding Model: Amazon Titan Text Embeddings v1
 - Knowledge Base Model: Amazon Titan Text Premier v1
 

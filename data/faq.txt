@@ -11,7 +11,7 @@ Q: What AWS services does this system use?
 A: The system uses Amazon Bedrock (for agents and models), AWS Lambda (for functions), Amazon S3 (for storage), Amazon OpenSearch Serverless (for knowledge base), and AWS IAM (for permissions).
 
 Q: Which foundation model is used?
-A: The system uses Meta Llama 3.3 70B Instruct as the primary model, with Amazon Titan models for embeddings and knowledge base operations.
+A: The system uses Amazon Nova Pro 1.0 as the primary model, with Amazon Titan models for embeddings and knowledge base operations.
 
 Q: Is this system production-ready?
 A: Yes, the system is designed for production use with comprehensive error handling, logging, monitoring, and security features.
@@ -217,7 +217,7 @@ Q: Can I implement session management?
 A: Yes, use session attributes in agent invocations to maintain context across multiple turns.
 
 Q: Can I add multi-modal capabilities?
-A: Yes, use models like Claude 3 Sonnet or Llama 3.2 Vision that support image inputs.
+A: Yes, use models like Amazon Nova Pro (which supports images) or Claude 3 Sonnet that support multi-modal inputs.
 
 Q: Can I implement streaming responses?
 A: Yes, use the InvokeAgentWithResponseStream API for real-time response streaming.

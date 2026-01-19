@@ -1,11 +1,12 @@
 # Multi-Agent AI System with Amazon Bedrock
 
-A production-ready multi-agent AI system built with Amazon Bedrock, featuring intelligent agent collaboration, knowledge base integration, and a modern Streamlit interface.
+A production-ready multi-agent AI system built with Amazon Bedrock, featuring intelligent agent collaboration, knowledge base integration, and a modern Streamlit interface. Powered by **Amazon Nova Pro 1.0** for advanced multimodal capabilities.
 
 > **Note**: This is a complete rewrite with modular architecture. Old implementation files are archived in `TO_BE_DELETED/` folder.
 
 ## 🌟 Features
 
+- **Amazon Nova Pro 1.0**: Latest AWS foundation model with multimodal capabilities (text, images, video)
 - **Multi-Agent Collaboration**: Supervisor agent intelligently routes queries to specialized collaborator agents
 - **Specialized Agents**:
   - 🌤️ **Weather Agent**: Real-time weather information
@@ -13,6 +14,7 @@ A production-ready multi-agent AI system built with Amazon Bedrock, featuring in
   - 📰 **News Agent**: Latest news and updates
 - **Knowledge Base Integration**: RAG-powered information retrieval with OpenSearch
 - **Interactive UI**: Modern Streamlit interface for easy interaction
+- **Idempotent Deployment**: Safe to run multiple times without conflicts
 - **Production-Ready**: Comprehensive error handling, logging, and monitoring
 
 ## 🏗️ Architecture
@@ -56,7 +58,7 @@ A production-ready multi-agent AI system built with Amazon Bedrock, featuring in
 - AWS Account with Bedrock access
 - AWS CLI configured with appropriate credentials
 - Model access enabled for:
-  - Llama 3.3 70B Instruct (`meta.llama3-3-70b-instruct-v1:0`)
+  - Amazon Nova Pro 1.0 (`amazon.nova-pro-v1:0`)
   - Amazon Titan Embed Text v1 (for embeddings)
 
 ## 🚀 Quick Start
@@ -211,7 +213,7 @@ System: Searches Knowledge Base → Returns relevant documentation
 
 Edit `config.py`:
 ```python
-foundation_model: str = "meta.llama3-3-70b-instruct-v1:0"
+foundation_model: str = "amazon.nova-pro-v1:0"
 ```
 
 ### Add New Agent
@@ -236,6 +238,26 @@ Edit `agents_config.py` to modify:
 ```bash
 python diagnose.py
 ```
+
+### Redeploy or Update
+
+The system supports **idempotent deployment** - you can safely run the deployment multiple times:
+
+```bash
+python main.py deploy
+```
+
+The system will:
+- ✅ Skip creating resources that already exist
+- ✅ Update configurations if needed
+- ✅ Handle conflicts gracefully
+- ✅ Continue deployment without errors
+
+This is useful for:
+- Updating agent configurations
+- Adding new sample data to knowledge base
+- Recovering from partial deployments
+- Testing deployment process
 
 ### Clean Up Resources
 

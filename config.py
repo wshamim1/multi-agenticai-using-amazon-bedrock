@@ -70,7 +70,7 @@ class AgentConfig:
     
     # Base configuration
     base_name: str = "multi-agent-ai"
-    foundation_model: str = "meta.llama3-3-70b-instruct-v1:0"  # Llama 3.3 70B Instruct - verified working
+    foundation_model: str = "amazon.nova-pro-v1:0"  # Amazon Nova Pro 1.0
     
     # Derived names
     agent_name: str = field(init=False)

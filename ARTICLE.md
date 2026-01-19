@@ -2,7 +2,15 @@
 
 ## Introduction
 
-In the rapidly evolving landscape of artificial intelligence, multi-agent systems represent a powerful paradigm for building sophisticated AI applications. This article explores the design, implementation, and deployment of a production-ready multi-agent AI system using Amazon Bedrock, complete with Knowledge Base integration for Retrieval Augmented Generation (RAG).
+In the rapidly evolving landscape of artificial intelligence, multi-agent systems represent a powerful paradigm for building sophisticated AI applications. This article explores the design, implementation, and deployment of a production-ready multi-agent AI system using Amazon Bedrock with **Amazon Nova Pro 1.0**, complete with Knowledge Base integration for Retrieval Augmented Generation (RAG).
+
+### Why Amazon Nova Pro?
+
+Amazon Nova Pro 1.0 is AWS's latest foundation model offering:
+- **Multimodal capabilities**: Supports text, images, and video inputs
+- **High performance**: Advanced reasoning and instruction-following
+- **Cost-effective**: Competitive pricing with AWS native integration
+- **Production-ready**: Optimized for AWS infrastructure
 
 ## The Challenge
 
@@ -361,6 +369,31 @@ This single command:
 - Deploys agents and Lambda functions
 - Uploads and indexes documentation
 - Sets up the complete system
+
+### Idempotent Deployment
+
+The system supports **safe redeployment** - you can run the deployment command multiple times without errors:
+
+```bash
+# First deployment - creates everything
+python main.py deploy
+
+# Second deployment - safely updates/skips existing resources
+python main.py deploy
+```
+
+**Benefits:**
+- ✅ Skip creating resources that already exist
+- ✅ Update configurations when needed
+- ✅ Handle conflicts gracefully (e.g., OpenSearch policies)
+- ✅ Recover from partial deployments
+- ✅ Test deployment process safely
+
+This is achieved through:
+- Checking for existing resources before creation
+- Catching and handling ConflictException errors
+- Using unique identifiers with timestamps
+- Graceful error handling and logging
 
 ## User Interface
 

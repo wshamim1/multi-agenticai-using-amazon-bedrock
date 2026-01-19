@@ -16,12 +16,17 @@ Key Features:
 Foundation Models Available:
 ===========================
 
-1. Meta Llama Models:
+1. Amazon Nova Models:
+   - Nova Pro 1.0: High-performance multimodal model (text, images, video)
+   - Nova Lite: Fast and cost-effective for simple tasks
+   - Nova Micro: Ultra-fast for high-volume tasks
+
+2. Meta Llama Models:
    - Llama 3.3 70B Instruct: Advanced instruction-following model
    - Llama 3.2 90B Vision: Multi-modal model with vision capabilities
    - Llama 3.1 405B: Largest open-source model
 
-2. Anthropic Claude Models:
+3. Anthropic Claude Models:
    - Claude 3.5 Sonnet: Balanced performance and speed
    - Claude 3 Opus: Most capable model for complex tasks
    - Claude 3 Haiku: Fast and cost-effective

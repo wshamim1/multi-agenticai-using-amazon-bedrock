@@ -82,6 +82,10 @@ class OpenSearchManager:
             return response['securityPolicyDetail']['name']
             
         except ClientError as e:
+            # If conflict, policy already exists for this collection
+            if e.response['Error']['Code'] == 'ConflictException':
+                logger.warning(f"Encryption policy conflict for collection '{collection_name}' - using existing policy")
+                return policy_name
             logger.error(f"Failed to create encryption policy: {e}")
             raise
     
@@ -136,6 +140,10 @@ class OpenSearchManager:
             return response['securityPolicyDetail']['name']
             
         except ClientError as e:
+            # If conflict, policy already exists for this collection
+            if e.response['Error']['Code'] == 'ConflictException':
+                logger.warning(f"Network policy conflict for collection '{collection_name}' - using existing policy")
+                return policy_name
             logger.error(f"Failed to create network policy: {e}")
             raise
     
@@ -230,6 +238,10 @@ class OpenSearchManager:
             return response['accessPolicyDetail']['name']
             
         except ClientError as e:
+            # If conflict, policy already exists for this collection
+            if e.response['Error']['Code'] == 'ConflictException':
+                logger.warning(f"Data access policy conflict for collection '{collection_name}' - using existing policy")
+                return policy_name
             logger.error(f"Failed to create data access policy: {e}")
             raise
     
