@@ -1,0 +1,170 @@
+ python main.py deploy 
+[2026-01-18 22:59:21] botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+[2026-01-18 22:59:21] config - INFO - AWS Configuration initialized - Region: us-east-1, Account: 949629622034
+[2026-01-18 22:59:21] config - INFO - Configuration initialized successfully
+[2026-01-18 22:59:21] __main__ - INFO - Starting system deployment...
+[2026-01-18 22:59:21] orchestrator - INFO - Multi-Agent Orchestrator initialized
+[2026-01-18 22:59:21] orchestrator - INFO - ================================================================================
+[2026-01-18 22:59:21] orchestrator - INFO - DEPLOYING COMPLETE MULTI-AGENT ETL SYSTEM
+[2026-01-18 22:59:21] orchestrator - INFO - ================================================================================
+[2026-01-18 22:59:21] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:21] orchestrator - INFO - Setting up IAM roles and policies...
+[2026-01-18 22:59:21] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:22] core.iam_manager - INFO - IAM role 'multi-agent-ai-multiagent-lambda-role' already exists: arn:aws:iam::949629622034:role/multi-agent-ai-multiagent-lambda-role
+[2026-01-18 22:59:22] core.iam_manager - INFO - Attached policy 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole' to role 'multi-agent-ai-multiagent-lambda-role'
+[2026-01-18 22:59:22] core.iam_manager - INFO - IAM role 'multi-agent-ai-agent-role-us-east-1-949629622034' already exists: arn:aws:iam::949629622034:role/multi-agent-ai-agent-role-us-east-1-949629622034
+[2026-01-18 22:59:22] core.iam_manager - INFO - IAM policy 'multi-agent-ai-multiagent-bedrock-allow-us-east-1-949629622034' already exists: arn:aws:iam::949629622034:policy/multi-agent-ai-multiagent-bedrock-allow-us-east-1-949629622034
+[2026-01-18 22:59:22] core.iam_manager - INFO - Attached policy 'arn:aws:iam::949629622034:policy/multi-agent-ai-multiagent-bedrock-allow-us-east-1-949629622034' to role 'multi-agent-ai-agent-role-us-east-1-949629622034'
+[2026-01-18 22:59:22] core.iam_manager - INFO - IAM role 'bedrock-agent-kb-execution-role' already exists: arn:aws:iam::949629622034:role/bedrock-agent-kb-execution-role
+[2026-01-18 22:59:22] orchestrator - INFO - ✅ IAM roles created successfully
+[2026-01-18 22:59:22] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:22] orchestrator - INFO - Setting up S3 storage...
+[2026-01-18 22:59:22] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:22] core.storage_manager - INFO - S3 bucket 'bedrock-agent-bucket-us-east-1-949629622034' already exists
+[2026-01-18 22:59:22] orchestrator - INFO - ✅ S3 bucket 'bedrock-agent-bucket-us-east-1-949629622034' ready
+[2026-01-18 22:59:22] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:22] orchestrator - INFO - Setting up OpenSearch Serverless...
+[2026-01-18 22:59:22] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:23] core.opensearch_manager - WARNING - Encryption policy conflict for collection 'bedrock-agent-kb-collection' - using existing policy
+[2026-01-18 22:59:23] core.opensearch_manager - INFO - Created network policy 'kb-network-795162'
+[2026-01-18 22:59:23] botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+[2026-01-18 22:59:23] core.opensearch_manager - INFO - Current user ARN: arn:aws:iam::949629622034:root
+[2026-01-18 22:59:23] core.opensearch_manager - INFO - Created data access policy 'kb-access-795162'
+[2026-01-18 22:59:23] core.opensearch_manager - INFO - Collection 'bedrock-agent-kb-collection' already exists
+[2026-01-18 22:59:23] botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+[2026-01-18 22:59:23] opensearch - INFO - HEAD https://09f21644rl6503pi6esf.us-east-1.aoss.amazonaws.com:443/bedrock-agent-kb-index [status:200 request:0.242s]
+[2026-01-18 22:59:23] core.opensearch_manager - INFO - Index 'bedrock-agent-kb-index' already exists
+[2026-01-18 22:59:23] orchestrator - INFO - ✅ OpenSearch collection and index ready
+[2026-01-18 22:59:23] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:23] orchestrator - INFO - Setting up Knowledge Base...
+[2026-01-18 22:59:23] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:24] core.iam_manager - INFO - IAM policy 'bedrock-agent-kb-bedrock-allow-us-east-1-949629622034' already exists: arn:aws:iam::949629622034:policy/bedrock-agent-kb-bedrock-allow-us-east-1-949629622034
+[2026-01-18 22:59:24] core.iam_manager - INFO - Attached policy 'arn:aws:iam::949629622034:policy/bedrock-agent-kb-bedrock-allow-us-east-1-949629622034' to role 'bedrock-agent-kb-execution-role'
+[2026-01-18 22:59:24] core.iam_manager - INFO - IAM policy 'bedrock-agent-kb-s3-allow-us-east-1-949629622034' already exists: arn:aws:iam::949629622034:policy/bedrock-agent-kb-s3-allow-us-east-1-949629622034
+[2026-01-18 22:59:24] core.iam_manager - INFO - Attached policy 'arn:aws:iam::949629622034:policy/bedrock-agent-kb-s3-allow-us-east-1-949629622034' to role 'bedrock-agent-kb-execution-role'
+[2026-01-18 22:59:24] core.iam_manager - INFO - IAM policy 'bedrock-agent-kb-aoss-allow-us-east-1-949629622034' already exists: arn:aws:iam::949629622034:policy/bedrock-agent-kb-aoss-allow-us-east-1-949629622034
+[2026-01-18 22:59:24] core.iam_manager - INFO - Attached policy 'arn:aws:iam::949629622034:policy/bedrock-agent-kb-aoss-allow-us-east-1-949629622034' to role 'bedrock-agent-kb-execution-role'
+[2026-01-18 22:59:34] core.knowledge_base_manager - INFO - Knowledge Base 'bedrock-agent-kb-us-east-1-949629622034' already exists: PQV6S3VT2S
+[2026-01-18 22:59:34] core.knowledge_base_manager - INFO - Data source 'bedrock-agent-kb-us-east-1-949629622034-s3-ds' already exists: WLMKMI7WFW
+[2026-01-18 22:59:34] orchestrator - INFO - ✅ Knowledge Base 'PQV6S3VT2S' created with data source 'WLMKMI7WFW'
+[2026-01-18 22:59:34] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:34] orchestrator - INFO - Setting up Lambda functions...
+[2026-01-18 22:59:34] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:35] core.lambda_manager - INFO - Lambda function 'weather-operations-lambda' already exists, updating...
+[2026-01-18 22:59:41] core.lambda_manager - INFO - Updated Lambda function 'weather-operations-lambda': arn:aws:lambda:us-east-1:949629622034:function:weather-operations-lambda
+[2026-01-18 22:59:41] core.lambda_manager - INFO - Removed existing Bedrock invoke permission for 'weather-operations-lambda'
+[2026-01-18 22:59:41] core.lambda_manager - INFO - Added Bedrock invoke permission for Lambda function 'weather-operations-lambda'
+[2026-01-18 22:59:41] orchestrator - INFO - ✅ Lambda function created for 'weather-agent'
+[2026-01-18 22:59:41] core.lambda_manager - INFO - Lambda function 'stock-operations-lambda' already exists, updating...
+[2026-01-18 22:59:47] core.lambda_manager - INFO - Updated Lambda function 'stock-operations-lambda': arn:aws:lambda:us-east-1:949629622034:function:stock-operations-lambda
+[2026-01-18 22:59:47] core.lambda_manager - INFO - Removed existing Bedrock invoke permission for 'stock-operations-lambda'
+[2026-01-18 22:59:47] core.lambda_manager - INFO - Added Bedrock invoke permission for Lambda function 'stock-operations-lambda'
+[2026-01-18 22:59:47] orchestrator - INFO - ✅ Lambda function created for 'stock-agent'
+[2026-01-18 22:59:47] core.lambda_manager - INFO - Lambda function 'news-operations-lambda' already exists, updating...
+[2026-01-18 22:59:53] core.lambda_manager - INFO - Updated Lambda function 'news-operations-lambda': arn:aws:lambda:us-east-1:949629622034:function:news-operations-lambda
+[2026-01-18 22:59:53] core.lambda_manager - INFO - Removed existing Bedrock invoke permission for 'news-operations-lambda'
+[2026-01-18 22:59:53] core.lambda_manager - INFO - Added Bedrock invoke permission for Lambda function 'news-operations-lambda'
+[2026-01-18 22:59:53] orchestrator - INFO - ✅ Lambda function created for 'news-agent'
+[2026-01-18 22:59:53] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:53] orchestrator - INFO - Setting up supervisor agent...
+[2026-01-18 22:59:53] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:53] core.agent_manager - INFO - Agent 'multi-agent-ai-multiagent-supervisor' already exists: FGJ37GA7V8
+[2026-01-18 22:59:54] core.agent_manager - INFO - Updated agent: FGJ37GA7V8
+[2026-01-18 22:59:54] core.agent_manager - INFO - Enabled supervisor mode for agent: FGJ37GA7V8
+[2026-01-18 22:59:54] orchestrator - INFO - ✅ Supervisor agent created: FGJ37GA7V8
+[2026-01-18 22:59:54] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:54] orchestrator - INFO - Setting up collaborator agents...
+[2026-01-18 22:59:54] orchestrator - INFO - ============================================================
+[2026-01-18 22:59:55] core.agent_manager - INFO - Agent 'weather-agent' already exists: YEDTYBDRZ4
+[2026-01-18 22:59:55] core.agent_manager - INFO - Action group 'weather-actions' already exists: ONCDXQVVMO
+[2026-01-18 22:59:55] core.agent_manager - INFO - Updated action group: ONCDXQVVMO
+[2026-01-18 22:59:55] core.agent_manager - INFO - Preparing agent: YEDTYBDRZ4
+[2026-01-18 22:59:56] core.agent_manager - INFO - Agent status: PREPARING. Waiting for PREPARED...
+[2026-01-18 23:00:01] orchestrator - INFO - Waiting for agent weather-agent to be fully prepared...
+[2026-01-18 23:00:11] core.agent_manager - INFO - Alias 'weather-agent-alias' already exists: FVVWGMV2NL
+[2026-01-18 23:00:11] orchestrator - INFO - Waiting for alias to be ready...
+[2026-01-18 23:00:16] core.agent_manager - INFO - Retrieved alias ARN from AWS: arn:aws:bedrock:us-east-1:949629622034:agent-alias/YEDTYBDRZ4/FVVWGMV2NL
+[2026-01-18 23:00:16] orchestrator - INFO - ✅ Collaborator agent created: weather-agent
+[2026-01-18 23:00:16] core.agent_manager - INFO - Agent 'stock-agent' already exists: ZHARLPFDMU
+[2026-01-18 23:00:16] core.agent_manager - INFO - Action group 'stock-actions' already exists: JAVEDIG7QD
+[2026-01-18 23:00:17] core.agent_manager - INFO - Updated action group: JAVEDIG7QD
+[2026-01-18 23:00:17] core.agent_manager - INFO - Preparing agent: ZHARLPFDMU
+[2026-01-18 23:00:17] core.agent_manager - INFO - Agent status: PREPARING. Waiting for PREPARED...
+[2026-01-18 23:00:23] orchestrator - INFO - Waiting for agent stock-agent to be fully prepared...
+[2026-01-18 23:00:33] core.agent_manager - INFO - Alias 'stock-agent-alias' already exists: SSKZBZFLD1
+[2026-01-18 23:00:33] orchestrator - INFO - Waiting for alias to be ready...
+[2026-01-18 23:00:38] core.agent_manager - INFO - Retrieved alias ARN from AWS: arn:aws:bedrock:us-east-1:949629622034:agent-alias/ZHARLPFDMU/SSKZBZFLD1
+[2026-01-18 23:00:38] orchestrator - INFO - ✅ Collaborator agent created: stock-agent
+[2026-01-18 23:00:38] core.agent_manager - INFO - Agent 'news-agent' already exists: VIWKHH2GJS
+[2026-01-18 23:00:38] core.agent_manager - INFO - Action group 'news-actions' already exists: X8VGZGUFMI
+[2026-01-18 23:00:39] core.agent_manager - INFO - Updated action group: X8VGZGUFMI
+[2026-01-18 23:00:39] core.agent_manager - INFO - Preparing agent: VIWKHH2GJS
+[2026-01-18 23:00:39] core.agent_manager - INFO - Agent status: PREPARING. Waiting for PREPARED...
+[2026-01-18 23:00:45] orchestrator - INFO - Waiting for agent news-agent to be fully prepared...
+[2026-01-18 23:00:55] core.agent_manager - INFO - Alias 'news-agent-alias' already exists: NY4ZFZXGGV
+[2026-01-18 23:00:55] orchestrator - INFO - Waiting for alias to be ready...
+[2026-01-18 23:01:00] core.agent_manager - INFO - Retrieved alias ARN from AWS: arn:aws:bedrock:us-east-1:949629622034:agent-alias/VIWKHH2GJS/NY4ZFZXGGV
+[2026-01-18 23:01:00] orchestrator - INFO - ✅ Collaborator agent created: news-agent
+[2026-01-18 23:01:00] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:00] orchestrator - INFO - Associating Knowledge Base with supervisor...
+[2026-01-18 23:01:00] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:00] core.agent_manager - INFO - Knowledge Base PQV6S3VT2S already associated with agent FGJ37GA7V8
+[2026-01-18 23:01:00] orchestrator - INFO - ✅ Knowledge Base associated with supervisor
+[2026-01-18 23:01:00] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:00] orchestrator - INFO - Associating collaborators with supervisor...
+[2026-01-18 23:01:00] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:00] orchestrator - INFO - Waiting for collaborator weather-agent to be PREPARED...
+[2026-01-18 23:01:00] core.agent_manager - INFO - Waiting for agent 'YEDTYBDRZ4' to reach status 'PREPARED'...
+[2026-01-18 23:01:00] core.agent_manager - INFO - Agent 'YEDTYBDRZ4' reached status 'PREPARED'
+[2026-01-18 23:01:00] core.agent_manager - INFO - Collaborator 'weather-agent' already associated
+[2026-01-18 23:01:00] orchestrator - INFO - ✅ Associated collaborator: weather-agent
+[2026-01-18 23:01:00] orchestrator - INFO - Waiting for collaborator stock-agent to be PREPARED...
+[2026-01-18 23:01:00] core.agent_manager - INFO - Waiting for agent 'ZHARLPFDMU' to reach status 'PREPARED'...
+[2026-01-18 23:01:01] core.agent_manager - INFO - Agent 'ZHARLPFDMU' reached status 'PREPARED'
+[2026-01-18 23:01:01] core.agent_manager - INFO - Collaborator 'stock-agent' already associated
+[2026-01-18 23:01:01] orchestrator - INFO - ✅ Associated collaborator: stock-agent
+[2026-01-18 23:01:01] orchestrator - INFO - Waiting for collaborator news-agent to be PREPARED...
+[2026-01-18 23:01:01] core.agent_manager - INFO - Waiting for agent 'VIWKHH2GJS' to reach status 'PREPARED'...
+[2026-01-18 23:01:01] core.agent_manager - INFO - Agent 'VIWKHH2GJS' reached status 'PREPARED'
+[2026-01-18 23:01:01] core.agent_manager - INFO - Collaborator 'news-agent' already associated
+[2026-01-18 23:01:01] orchestrator - INFO - ✅ Associated collaborator: news-agent
+[2026-01-18 23:01:01] core.agent_manager - INFO - Preparing agent: FGJ37GA7V8
+[2026-01-18 23:01:02] core.agent_manager - INFO - Agent status: PREPARING. Waiting for PREPARED...
+[2026-01-18 23:01:07] core.agent_manager - INFO - Alias 'multi-agent-alias' already exists: F08T9GUMJQ
+[2026-01-18 23:01:07] orchestrator - INFO - ✅ Supervisor prepared with alias: F08T9GUMJQ
+[2026-01-18 23:01:07] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:07] orchestrator - INFO - Uploading data to Knowledge Base...
+[2026-01-18 23:01:07] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:07] core.storage_manager - INFO - Uploaded 'data/sample_kb_data.txt' to s3://bedrock-agent-bucket-us-east-1-949629622034/knowledge-base//sample_kb_data.txt
+[2026-01-18 23:01:07] core.storage_manager - INFO - Uploaded 'data/aws_bedrock_guide.txt' to s3://bedrock-agent-bucket-us-east-1-949629622034/knowledge-base//aws_bedrock_guide.txt
+[2026-01-18 23:01:07] core.storage_manager - INFO - Uploaded 'data/.DS_Store' to s3://bedrock-agent-bucket-us-east-1-949629622034/knowledge-base//.DS_Store
+[2026-01-18 23:01:08] core.storage_manager - INFO - Uploaded 'data/agent_capabilities.txt' to s3://bedrock-agent-bucket-us-east-1-949629622034/knowledge-base//agent_capabilities.txt
+[2026-01-18 23:01:08] core.storage_manager - INFO - Uploaded 'data/README.md' to s3://bedrock-agent-bucket-us-east-1-949629622034/knowledge-base//README.md
+[2026-01-18 23:01:08] core.storage_manager - INFO - Uploaded 'data/faq.txt' to s3://bedrock-agent-bucket-us-east-1-949629622034/knowledge-base//faq.txt
+[2026-01-18 23:01:08] core.storage_manager - INFO - Uploaded 6 files from 'data' to s3://bedrock-agent-bucket-us-east-1-949629622034/knowledge-base/
+[2026-01-18 23:01:08] orchestrator - INFO - ✅ Uploaded 6 files to Knowledge Base
+[2026-01-18 23:01:08] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:08] orchestrator - INFO - Syncing Knowledge Base...
+[2026-01-18 23:01:08] orchestrator - INFO - ============================================================
+[2026-01-18 23:01:08] orchestrator - INFO - Starting ingestion job for KB PQV6S3VT2S, data source WLMKMI7WFW
+[2026-01-18 23:01:09] core.knowledge_base_manager - INFO - Started ingestion job: GCPQZKBYU7
+[2026-01-18 23:01:09] orchestrator - INFO - Waiting for ingestion to complete...
+[2026-01-18 23:01:09] core.knowledge_base_manager - INFO - Ingestion job status: STARTING. Waiting...
+[2026-01-18 23:01:19] core.knowledge_base_manager - INFO - Ingestion job GCPQZKBYU7 completed successfully
+[2026-01-18 23:01:19] orchestrator - INFO - ✅ Knowledge Base sync completed: GCPQZKBYU7
+[2026-01-18 23:01:19] orchestrator - INFO - ✅ Knowledge Base synced successfully
+[2026-01-18 23:01:19] orchestrator - INFO - ================================================================================
+[2026-01-18 23:01:19] orchestrator - INFO - ✅ DEPLOYMENT COMPLETE in 117.82 seconds
+[2026-01-18 23:01:19] orchestrator - INFO - ================================================================================
+[2026-01-18 23:01:19] __main__ - INFO - 
+================================================================================
+[2026-01-18 23:01:19] __main__ - INFO - DEPLOYMENT SUMMARY
+[2026-01-18 23:01:19] __main__ - INFO - ================================================================================
+[2026-01-18 23:01:19] __main__ - INFO - Supervisor Agent ID: FGJ37GA7V8
+[2026-01-18 23:01:19] __main__ - INFO - Knowledge Base ID: PQV6S3VT2S
+[2026-01-18 23:01:19] __main__ - INFO - S3 Bucket: bedrock-agent-bucket-us-east-1-949629622034
+[2026-01-18 23:01:19] __main__ - INFO - OpenSearch Endpoint: https://09f21644rl6503pi6esf.us-east-1.aoss.amazonaws.com
+[2026-01-18 23:01:19] __main__ - INFO - Collaborators: weather-agent, stock-agent, news-agent
+[2026-01-18 23:01:19] __main__ - INFO - Deployment Time: 117.82 seconds
+[2026-01-18 23:01:19] __main__ - INFO - ================================================================================
+(venv) wilsonshamim@Mac genai-agenticai_using_amazon_bedrock % 
