@@ -1,0 +1,280 @@
+Frequently Asked Questions (FAQ)
+Amazon Bedrock Multi-Agent System
+
+General Questions:
+==================
+
+Q: What is the Amazon Bedrock Multi-Agent System?
+A: It's an intelligent AI system that uses multiple specialized agents coordinated by a supervisor to handle complex queries across different domains like weather, stocks, and news.
+
+Q: What AWS services does this system use?
+A: The system uses Amazon Bedrock (for agents and models), AWS Lambda (for functions), Amazon S3 (for storage), Amazon OpenSearch Serverless (for knowledge base), and AWS IAM (for permissions).
+
+Q: Which foundation model is used?
+A: The system uses Meta Llama 3.3 70B Instruct as the primary model, with Amazon Titan models for embeddings and knowledge base operations.
+
+Q: Is this system production-ready?
+A: Yes, the system is designed for production use with comprehensive error handling, logging, monitoring, and security features.
+
+
+Setup and Configuration:
+========================
+
+Q: What are the prerequisites for deploying this system?
+A: You need an AWS account with Bedrock access, appropriate IAM permissions, Python 3.9+, and the required Python packages listed in requirements.txt.
+
+Q: How do I request access to Bedrock models?
+A: Go to the AWS Bedrock console, navigate to Model access, and request access to the models you want to use. Approval is typically instant for most models.
+
+Q: What IAM permissions are required?
+A: The system requires permissions for Bedrock (agents, models, knowledge bases), Lambda, S3, OpenSearch, IAM, and CloudWatch. See the IAM policy in core/iam_manager.py for details.
+
+Q: How long does deployment take?
+A: Initial deployment typically takes 10-15 minutes, including resource creation, agent setup, and knowledge base synchronization.
+
+Q: Can I deploy this in any AWS region?
+A: Deploy in regions where Amazon Bedrock is available. Recommended regions: us-east-1, us-west-2, eu-west-1.
+
+
+Agent Questions:
+===============
+
+Q: How many agents are included?
+A: The system includes one supervisor agent and three collaborator agents: Weather Agent, Stock Agent, and News Agent.
+
+Q: Can I add more agents?
+A: Yes, you can add new agents by defining them in agents_config.py and creating corresponding Lambda functions.
+
+Q: How does the supervisor agent work?
+A: The supervisor analyzes user queries, determines which specialized agents to invoke, routes requests appropriately, and aggregates responses.
+
+Q: What is the SUPERVISOR_ROUTER mode?
+A: It's a collaboration pattern where the supervisor routes requests to appropriate collaborators who work independently, then aggregates their responses.
+
+Q: Can agents work in parallel?
+A: Yes, when multiple agents are needed, they can be invoked in parallel to reduce response time.
+
+
+Knowledge Base Questions:
+=========================
+
+Q: What is a knowledge base?
+A: A knowledge base is a RAG (Retrieval Augmented Generation) system that allows agents to access and retrieve information from your documents.
+
+Q: What file formats are supported?
+A: The knowledge base supports TXT, PDF, DOCX, HTML, and Markdown files.
+
+Q: How do I add documents to the knowledge base?
+A: Place your documents in the data/ directory, then run the sync operation to upload them to S3 and index them in OpenSearch.
+
+Q: How often should I sync the knowledge base?
+A: Sync whenever you add, update, or remove documents. You can also set up automated syncing using Lambda triggers.
+
+Q: What is the maximum document size?
+A: Individual documents should be under 50MB. For larger documents, consider splitting them into smaller files.
+
+Q: How does semantic search work?
+A: Documents are converted to vector embeddings using Amazon Titan Embeddings, stored in OpenSearch, and retrieved based on semantic similarity to queries.
+
+
+Usage Questions:
+===============
+
+Q: How do I query the system?
+A: Use the Streamlit web interface (streamlit run streamlit_app.py) or invoke agents programmatically using the AWS SDK.
+
+Q: What types of queries can I ask?
+A: You can ask about weather ("What's the weather in Boston?"), stocks ("What's Apple's stock price?"), news ("Latest tech news?"), or combinations of these.
+
+Q: Can I ask multi-domain questions?
+A: Yes! For example: "What's the weather in Seattle and Microsoft's stock price?" The supervisor will coordinate multiple agents.
+
+Q: How accurate are the responses?
+A: Weather and stock data come from real-time APIs. News is aggregated from reputable sources. Knowledge base responses depend on your document quality.
+
+Q: Is there a query limit?
+A: AWS Bedrock has service quotas. Check your account limits in the AWS Service Quotas console.
+
+
+Troubleshooting:
+===============
+
+Q: Why am I getting "ResourceNotFoundException"?
+A: This usually means a resource (agent, knowledge base, or model) doesn't exist or isn't accessible. Check resource IDs and IAM permissions.
+
+Q: Why is my agent not responding?
+A: Check CloudWatch logs for errors, verify IAM permissions, ensure the agent is in PREPARED state, and confirm model access.
+
+Q: Why is the knowledge base not returning results?
+A: Verify the knowledge base is synced, check that documents are uploaded to S3, ensure OpenSearch collection is active, and review retrieval settings.
+
+Q: How do I debug agent invocations?
+A: Enable trace logging in the Streamlit app or use the diagnose.py script to check system status and test components.
+
+Q: What if Lambda functions timeout?
+A: Increase the timeout setting in config.py, optimize function code, or check if external APIs are slow.
+
+Q: Why am I getting "AccessDeniedException"?
+A: This indicates insufficient IAM permissions. Review the IAM policy and ensure all required permissions are granted.
+
+
+Performance Questions:
+=====================
+
+Q: How fast are agent responses?
+A: Single-agent queries typically respond in 1-3 seconds. Multi-agent queries take 3-5 seconds depending on complexity.
+
+Q: Can I improve response speed?
+A: Use smaller models for simple tasks, optimize prompts, implement caching, and ensure Lambda functions have adequate memory.
+
+Q: What affects knowledge base query performance?
+A: Document size and quantity, OpenSearch collection size, embedding model choice, and number of results retrieved.
+
+Q: How do I monitor system performance?
+A: Use CloudWatch metrics for latency, invocation counts, and error rates. The Streamlit app also shows response times.
+
+
+Cost Questions:
+==============
+
+Q: How much does this system cost to run?
+A: Costs depend on usage. Main factors: Bedrock model invocations, Lambda executions, OpenSearch collection size, and S3 storage.
+
+Q: How can I reduce costs?
+A: Use smaller models when possible, optimize prompt lengths, right-size OpenSearch collections, and implement caching.
+
+Q: Are there any free tier benefits?
+A: AWS Free Tier includes some Lambda and S3 usage. Bedrock and OpenSearch Serverless have pay-per-use pricing with no free tier.
+
+Q: How do I estimate costs?
+A: Use the AWS Pricing Calculator and monitor actual usage in AWS Cost Explorer.
+
+
+Security Questions:
+==================
+
+Q: Is my data secure?
+A: Yes. All data is encrypted at rest and in transit. IAM roles follow least privilege principles. No data is shared with third parties.
+
+Q: Where is my data stored?
+A: Documents are stored in S3 in your AWS account. Vector embeddings are in OpenSearch Serverless. All data stays in your chosen region.
+
+Q: Can I use this with sensitive data?
+A: Yes, but ensure you comply with your organization's data governance policies. Consider using AWS PrivateLink and VPC endpoints.
+
+Q: How are API keys managed?
+A: External API keys (for weather, stocks, news) should be stored in AWS Secrets Manager and accessed securely by Lambda functions.
+
+
+Customization Questions:
+=======================
+
+Q: Can I customize agent instructions?
+A: Yes, modify the instructions in agents_config.py to change agent behavior and response style.
+
+Q: Can I use different foundation models?
+A: Yes, update the foundation_model setting in config.py. Ensure you have access to the model in Bedrock.
+
+Q: Can I change the collaboration mode?
+A: Yes, modify the collaboration_mode in config.py. Options are SUPERVISOR, SUPERVISOR_ROUTER, or DISABLED.
+
+Q: Can I add custom Lambda functions?
+A: Yes, create new Lambda functions and add them as action groups in agents_config.py.
+
+Q: Can I integrate with my existing systems?
+A: Yes, create Lambda functions that connect to your APIs, databases, or services, then add them as agent action groups.
+
+
+Maintenance Questions:
+=====================
+
+Q: How do I update the system?
+A: Pull the latest code, update dependencies, and redeploy using main.py. The system handles updates gracefully.
+
+Q: How do I backup my data?
+A: S3 buckets can be versioned and backed up. Export OpenSearch indices periodically. Use AWS Backup for automated backups.
+
+Q: How do I clean up resources?
+A: Run cleanup.py to remove all created resources. This is useful for testing or when decommissioning the system.
+
+Q: What logs should I monitor?
+A: Monitor CloudWatch logs for agents, Lambda functions, and OpenSearch. Set up alarms for errors and performance issues.
+
+Q: How do I upgrade to new model versions?
+A: Update the model ID in config.py, test thoroughly, then redeploy. Some models may require re-requesting access.
+
+
+Advanced Questions:
+==================
+
+Q: Can I implement custom orchestration logic?
+A: Yes, modify orchestrator.py to implement custom workflows, conditional logic, or error recovery strategies.
+
+Q: Can I use this with Amazon Bedrock Guardrails?
+A: Yes, configure guardrails in the Bedrock console and reference them in your agent configuration.
+
+Q: Can I implement session management?
+A: Yes, use session attributes in agent invocations to maintain context across multiple turns.
+
+Q: Can I add multi-modal capabilities?
+A: Yes, use models like Claude 3 Sonnet or Llama 3.2 Vision that support image inputs.
+
+Q: Can I implement streaming responses?
+A: Yes, use the InvokeAgentWithResponseStream API for real-time response streaming.
+
+
+Integration Questions:
+=====================
+
+Q: Can I integrate this with my web application?
+A: Yes, expose the agent invocation through an API Gateway or call it directly from your backend.
+
+Q: Can I use this with mobile apps?
+A: Yes, create a REST API wrapper or use AWS Amplify for mobile integration.
+
+Q: Can I integrate with Slack or Teams?
+A: Yes, create a bot that calls the agent API and handles messaging platform interactions.
+
+Q: Can I use this with voice assistants?
+A: Yes, integrate with Amazon Lex or other voice platforms that can call your agent API.
+
+
+Support and Resources:
+=====================
+
+Q: Where can I find more documentation?
+A: Check README.md, TROUBLESHOOTING.md, and MIGRATION_GUIDE.md in the project repository.
+
+Q: How do I report issues?
+A: Create an issue in the project repository or contact your AWS support team.
+
+Q: Are there example queries I can try?
+A: Yes, see the agent_capabilities.txt file for comprehensive examples of supported queries.
+
+Q: Where can I learn more about Amazon Bedrock?
+A: Visit the AWS Bedrock documentation at https://docs.aws.amazon.com/bedrock/
+
+Q: Can I get help with customization?
+A: Yes, consult AWS Solutions Architects or AWS Professional Services for custom implementation support.
+
+
+Best Practices:
+==============
+
+Q: What are the best practices for agent design?
+A: Keep instructions clear, define specific action groups, use appropriate models, test thoroughly, and implement proper error handling.
+
+Q: What are the best practices for knowledge bases?
+A: Organize documents logically, use consistent formatting, keep content focused, update regularly, and monitor query performance.
+
+Q: What are the best practices for security?
+A: Use least privilege IAM roles, enable encryption, implement guardrails, audit regularly, and follow AWS security best practices.
+
+Q: What are the best practices for cost optimization?
+A: Choose appropriate model sizes, optimize prompts, use caching, right-size resources, and monitor usage patterns.
+
+
+Conclusion:
+==========
+
+For questions not covered here, refer to the comprehensive documentation in the project repository or contact AWS support. The system is designed to be flexible and extensible, so don't hesitate to customize it for your specific needs.

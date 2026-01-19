@@ -1,0 +1,375 @@
+Amazon Bedrock Multi-Agent System - Technical Guide
+
+Introduction to Amazon Bedrock:
+==============================
+
+Amazon Bedrock is a fully managed service that provides access to high-performing foundation models (FMs) from leading AI companies through a single API. It enables you to build and scale generative AI applications with security, privacy, and responsible AI features.
+
+Key Features:
+- Access to multiple foundation models
+- Serverless experience with no infrastructure management
+- Built-in security and compliance
+- Knowledge bases for RAG applications
+- Agents for task automation
+- Guardrails for responsible AI
+
+Foundation Models Available:
+===========================
+
+1. Meta Llama Models:
+   - Llama 3.3 70B Instruct: Advanced instruction-following model
+   - Llama 3.2 90B Vision: Multi-modal model with vision capabilities
+   - Llama 3.1 405B: Largest open-source model
+
+2. Anthropic Claude Models:
+   - Claude 3.5 Sonnet: Balanced performance and speed
+   - Claude 3 Opus: Most capable model for complex tasks
+   - Claude 3 Haiku: Fast and cost-effective
+
+3. Amazon Titan Models:
+   - Titan Text Premier: Advanced text generation
+   - Titan Text Embeddings: Vector embeddings for search
+   - Titan Image Generator: Text-to-image generation
+
+4. AI21 Labs Jurassic Models:
+   - Jurassic-2 Ultra: High-quality text generation
+   - Jurassic-2 Mid: Balanced performance
+
+5. Cohere Models:
+   - Command R+: Advanced reasoning and generation
+   - Embed: Text embeddings for semantic search
+
+6. Stability AI:
+   - Stable Diffusion XL: High-quality image generation
+
+
+Amazon Bedrock Agents:
+=====================
+
+What are Bedrock Agents?
+Agents are autonomous AI systems that can break down complex tasks, interact with APIs, query databases, and take actions to complete user requests.
+
+Agent Components:
+
+1. Foundation Model:
+   - The AI model that powers the agent's reasoning
+   - Determines agent's language understanding and generation capabilities
+   - Can be customized with specific instructions
+
+2. Instructions:
+   - Define the agent's role and behavior
+   - Provide context about capabilities
+   - Guide response formatting
+
+3. Action Groups:
+   - Define APIs and functions the agent can call
+   - Specify input/output schemas
+   - Connect to Lambda functions or API endpoints
+
+4. Knowledge Bases:
+   - Provide domain-specific information
+   - Enable RAG (Retrieval Augmented Generation)
+   - Support semantic search over documents
+
+
+Multi-Agent Collaboration:
+=========================
+
+Collaboration Modes:
+
+1. SUPERVISOR (Default):
+   - Supervisor agent coordinates all interactions
+   - Collaborators provide specialized capabilities
+   - Supervisor makes final decisions
+
+2. SUPERVISOR_ROUTER:
+   - Supervisor routes requests to appropriate collaborators
+   - Collaborators work independently
+   - Responses aggregated by supervisor
+
+3. DISABLED:
+   - No collaboration between agents
+   - Each agent works in isolation
+
+Benefits of Multi-Agent Systems:
+- Specialized expertise per domain
+- Parallel processing capabilities
+- Modular and maintainable architecture
+- Scalable to add new capabilities
+
+
+Knowledge Bases:
+===============
+
+What are Knowledge Bases?
+Knowledge bases enable RAG by connecting your agents to proprietary data sources. They automatically handle document ingestion, chunking, embedding, and retrieval.
+
+Components:
+
+1. Data Source:
+   - Amazon S3 buckets containing documents
+   - Supported formats: TXT, PDF, DOCX, HTML, MD
+   - Automatic document processing
+
+2. Embeddings Model:
+   - Converts text to vector representations
+   - Amazon Titan Embeddings recommended
+   - Enables semantic search
+
+3. Vector Database:
+   - Amazon OpenSearch Serverless
+   - Stores document embeddings
+   - Performs similarity search
+
+4. Retrieval Configuration:
+   - Number of results to return
+   - Similarity threshold
+   - Metadata filtering
+
+Knowledge Base Workflow:
+1. Upload documents to S3
+2. Create knowledge base with data source
+3. Sync to generate embeddings
+4. Associate with agent
+5. Agent queries knowledge base during inference
+
+
+IAM Permissions Required:
+========================
+
+For Agents:
+- bedrock:InvokeModel
+- bedrock:InvokeAgent
+- bedrock:GetAgent
+- bedrock:GetAgentAlias
+- bedrock:ListAgentAliases
+- bedrock:AssociateAgentCollaborator
+
+For Knowledge Bases:
+- bedrock:Retrieve
+- bedrock:RetrieveAndGenerate
+- aoss:APIAccessAll (OpenSearch)
+- s3:GetObject (S3 data source)
+
+For Lambda Functions:
+- lambda:InvokeFunction
+- logs:CreateLogGroup
+- logs:CreateLogStream
+- logs:PutLogEvents
+
+
+Best Practices:
+==============
+
+1. Agent Design:
+   - Keep instructions clear and concise
+   - Define specific action groups for each capability
+   - Use appropriate foundation models for the task
+   - Test with various query types
+
+2. Knowledge Base Optimization:
+   - Organize documents logically in S3
+   - Use consistent formatting
+   - Keep documents focused on specific topics
+   - Regular updates and syncing
+
+3. Multi-Agent Architecture:
+   - Design agents with single responsibilities
+   - Use SUPERVISOR_ROUTER for independent tasks
+   - Implement proper error handling
+   - Monitor agent interactions
+
+4. Security:
+   - Use IAM roles with least privilege
+   - Enable encryption at rest and in transit
+   - Implement guardrails for content filtering
+   - Regular security audits
+
+5. Performance:
+   - Choose appropriate model sizes
+   - Optimize prompt engineering
+   - Use caching when possible
+   - Monitor latency and costs
+
+
+Monitoring and Debugging:
+========================
+
+CloudWatch Logs:
+- Agent invocation logs
+- Lambda function logs
+- Knowledge base query logs
+- Error and exception tracking
+
+CloudWatch Metrics:
+- Invocation count
+- Latency metrics
+- Error rates
+- Token usage
+
+Bedrock Console:
+- Agent test interface
+- Knowledge base testing
+- Model playground
+- Usage analytics
+
+Debugging Tips:
+- Enable trace logging for detailed execution flow
+- Check IAM permissions first
+- Verify model access in Bedrock console
+- Test components individually before integration
+
+
+Cost Optimization:
+=================
+
+Model Selection:
+- Use smaller models for simple tasks
+- Reserve larger models for complex reasoning
+- Consider cost vs. performance tradeoffs
+
+Token Management:
+- Optimize prompt length
+- Use efficient response formats
+- Implement caching strategies
+
+Knowledge Base:
+- Right-size OpenSearch collection
+- Optimize document chunking
+- Use appropriate embedding models
+
+Lambda Functions:
+- Optimize memory allocation
+- Reduce cold starts
+- Use provisioned concurrency for high traffic
+
+
+Common Use Cases:
+================
+
+1. Customer Support:
+   - Automated query handling
+   - Knowledge base integration
+   - Multi-language support
+
+2. Content Generation:
+   - Article writing
+   - Code generation
+   - Creative content
+
+3. Data Analysis:
+   - Document summarization
+   - Information extraction
+   - Trend analysis
+
+4. Task Automation:
+   - Workflow orchestration
+   - API integration
+   - Process automation
+
+5. Research Assistant:
+   - Literature review
+   - Data gathering
+   - Report generation
+
+
+Integration Patterns:
+====================
+
+1. API Integration:
+   - RESTful API calls from agents
+   - Authentication handling
+   - Response parsing
+
+2. Database Integration:
+   - Query execution via Lambda
+   - Data retrieval and updates
+   - Transaction management
+
+3. Third-Party Services:
+   - Weather APIs
+   - Stock market data
+   - News aggregation
+
+4. Internal Systems:
+   - CRM integration
+   - ERP systems
+   - Custom applications
+
+
+Troubleshooting Guide:
+=====================
+
+Issue: Agent not responding
+Solution: Check IAM permissions, verify agent status, review CloudWatch logs
+
+Issue: Knowledge base not found
+Solution: Verify OpenSearch collection exists, check data source sync status
+
+Issue: Lambda timeout
+Solution: Increase timeout setting, optimize function code, check external API latency
+
+Issue: Model access denied
+Solution: Request model access in Bedrock console, verify region availability
+
+Issue: High latency
+Solution: Optimize prompts, use smaller models, implement caching
+
+Issue: Incorrect responses
+Solution: Refine agent instructions, improve knowledge base content, adjust retrieval settings
+
+
+Advanced Features:
+=================
+
+1. Custom Orchestration:
+   - Complex multi-step workflows
+   - Conditional logic
+   - Error recovery
+
+2. Session Management:
+   - Context retention across turns
+   - User preference tracking
+   - Conversation history
+
+3. Guardrails:
+   - Content filtering
+   - PII detection and redaction
+   - Topic restrictions
+
+4. Model Customization:
+   - Fine-tuning with custom data
+   - Continued pre-training
+   - Prompt engineering
+
+
+Resources:
+=========
+
+Documentation:
+- AWS Bedrock Documentation: https://docs.aws.amazon.com/bedrock/
+- Bedrock User Guide: https://docs.aws.amazon.com/bedrock/latest/userguide/
+- API Reference: https://docs.aws.amazon.com/bedrock/latest/APIReference/
+
+Tutorials:
+- Getting Started with Bedrock Agents
+- Building Knowledge Bases
+- Multi-Agent Collaboration
+
+Community:
+- AWS Forums
+- GitHub Examples
+- Stack Overflow
+
+Support:
+- AWS Support Center
+- Technical Account Manager
+- AWS Solutions Architects
+
+
+Conclusion:
+==========
+
+Amazon Bedrock provides a comprehensive platform for building sophisticated AI applications. By leveraging agents, knowledge bases, and multi-agent collaboration, you can create powerful solutions that handle complex tasks with minimal infrastructure management.
+
+For implementation details specific to this multi-agent system, refer to the README.md and TROUBLESHOOTING.md files in the project repository.

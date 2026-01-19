@@ -1,0 +1,209 @@
+Agent Capabilities and Use Cases
+
+Weather Agent Capabilities:
+==========================
+
+The Weather Agent is a specialized collaborator that provides real-time weather information for cities worldwide.
+
+Key Features:
+- Current temperature readings in Fahrenheit and Celsius
+- Weather conditions (sunny, cloudy, rainy, snowy, etc.)
+- Humidity percentage
+- Wind speed and direction
+- Atmospheric pressure
+- Visibility information
+
+Supported Queries:
+- "What's the weather in [city]?"
+- "Is it raining in [city]?"
+- "What's the temperature in [city]?"
+- "How's the weather looking in [city] today?"
+- "Will it be sunny in [city]?"
+
+Example Responses:
+Query: "What's the weather in Boston?"
+Response: "The current weather in Boston is partly cloudy with a temperature of 72°F (22°C). Humidity is at 65% with winds from the northwest at 10 mph."
+
+Query: "Is it raining in Seattle?"
+Response: "Yes, it is currently raining in Seattle. The temperature is 58°F (14°C) with light rain and winds at 8 mph."
+
+
+Stock Agent Capabilities:
+========================
+
+The Stock Agent provides real-time stock market information and financial data.
+
+Key Features:
+- Current stock prices
+- Daily price changes (absolute and percentage)
+- Market capitalization
+- Trading volume
+- 52-week high/low
+- Price-to-earnings ratio
+
+Supported Queries:
+- "What's the stock price of [company/ticker]?"
+- "How is [company] stock performing?"
+- "What's the current price of [ticker] shares?"
+- "Show me [company] stock information"
+- "What's [ticker] trading at?"
+
+Example Responses:
+Query: "What's the stock price of Apple?"
+Response: "Apple Inc. (AAPL) is currently trading at $178.50, up $2.30 (+1.31%) today. Market cap: $2.8T, Volume: 52.3M shares."
+
+Query: "How is Tesla stock performing?"
+Response: "Tesla Inc. (TSLA) is at $242.80, down $5.20 (-2.10%) today. The stock has a 52-week range of $138.80 - $299.29."
+
+
+News Agent Capabilities:
+=======================
+
+The News Agent fetches and summarizes the latest news articles across various topics.
+
+Key Features:
+- Latest headlines from multiple sources
+- Topic-based news filtering
+- Article summaries
+- Publication timestamps
+- Source attribution
+- Trending topics
+
+Supported Queries:
+- "What are the latest [topic] news?"
+- "Show me recent news about [subject]"
+- "What's happening in [category] today?"
+- "Give me the top headlines"
+- "What are the trending news stories?"
+
+Example Responses:
+Query: "What are the latest technology news?"
+Response: "Here are the top technology headlines:
+1. 'AI Breakthrough: New Model Achieves Human-Level Performance' - TechCrunch, 2 hours ago
+2. 'Major Cloud Provider Announces New Services' - The Verge, 4 hours ago
+3. 'Cybersecurity Alert: New Vulnerability Discovered' - Wired, 6 hours ago"
+
+Query: "Show me recent business news"
+Response: "Latest business news:
+1. 'Stock Market Reaches New High' - Bloomberg, 1 hour ago
+2. 'Tech Giant Reports Record Earnings' - CNBC, 3 hours ago
+3. 'Federal Reserve Announces Policy Decision' - WSJ, 5 hours ago"
+
+
+Multi-Agent Collaboration:
+=========================
+
+The supervisor agent can coordinate multiple agents to answer complex queries that require information from different domains.
+
+Example Multi-Agent Queries:
+
+Query: "What's the weather in New York and what's Apple's stock price?"
+Response: "The weather in New York is currently sunny with a temperature of 75°F (24°C). Apple Inc. (AAPL) is trading at $178.50, up $2.30 (+1.31%) today."
+
+Query: "Give me the latest tech news and weather forecast for San Francisco"
+Response: "Latest technology news:
+1. 'AI Breakthrough: New Model Achieves Human-Level Performance' - TechCrunch
+2. 'Major Cloud Provider Announces New Services' - The Verge
+
+Weather in San Francisco: Currently 68°F (20°C) with partly cloudy skies. Humidity at 70% with light winds."
+
+Query: "What's the stock price of Microsoft and is it raining in Seattle?"
+Response: "Microsoft Corp. (MSFT) is currently trading at $378.90, up $4.20 (+1.12%) today. Yes, it is currently raining in Seattle with a temperature of 58°F (14°C)."
+
+
+Agent Integration Patterns:
+==========================
+
+1. Sequential Processing:
+   - Supervisor receives query
+   - Identifies required agents
+   - Invokes agents in sequence
+   - Aggregates responses
+   - Returns unified answer
+
+2. Parallel Processing:
+   - Multiple agents invoked simultaneously
+   - Responses collected concurrently
+   - Results merged and formatted
+   - Faster response times for multi-domain queries
+
+3. Conditional Routing:
+   - Query analysis determines agent selection
+   - Only relevant agents are invoked
+   - Efficient resource utilization
+   - Optimized response generation
+
+
+Best Practices for Agent Usage:
+==============================
+
+1. Weather Queries:
+   - Always specify the city name
+   - Use common city names or major cities
+   - Be specific about what weather information you need
+
+2. Stock Queries:
+   - Include company name or ticker symbol
+   - Use standard ticker symbols (e.g., AAPL, MSFT, GOOGL)
+   - Specify if you need specific metrics
+
+3. News Queries:
+   - Mention the topic or category
+   - Be specific about the type of news (business, tech, sports, etc.)
+   - Indicate if you want recent or trending news
+
+4. Multi-Agent Queries:
+   - Clearly separate different information requests
+   - Use "and" to combine multiple queries
+   - Be explicit about what you need from each domain
+
+
+Error Handling:
+==============
+
+Each agent includes robust error handling:
+- Invalid city names: Returns error message with suggestions
+- Unknown stock tickers: Provides similar ticker suggestions
+- No news found: Suggests alternative topics or broader searches
+- API failures: Graceful degradation with cached data when available
+
+
+Performance Metrics:
+==================
+
+Typical Response Times:
+- Weather queries: 1-2 seconds
+- Stock queries: 1-2 seconds
+- News queries: 2-3 seconds
+- Multi-agent queries: 3-5 seconds
+
+Accuracy:
+- Weather data: Real-time from reliable sources
+- Stock prices: Live market data with minimal delay
+- News articles: Curated from reputable sources
+
+
+Future Enhancements:
+==================
+
+Planned Agent Additions:
+- Calendar Agent: Schedule management and reminders
+- Email Agent: Email composition and management
+- Travel Agent: Flight and hotel booking assistance
+- Shopping Agent: Product search and price comparison
+- Health Agent: Fitness tracking and health tips
+
+Planned Features:
+- Voice interaction support
+- Multi-language support
+- Personalized recommendations
+- Historical data analysis
+- Predictive analytics
+
+
+Conclusion:
+==========
+
+The multi-agent system provides a flexible and powerful framework for handling diverse user queries. Each agent specializes in its domain while the supervisor ensures seamless coordination and response aggregation.
+
+For technical implementation details, refer to the main documentation or the system architecture guide.

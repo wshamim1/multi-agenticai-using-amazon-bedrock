@@ -18,23 +18,36 @@ A production-ready multi-agent AI system built with Amazon Bedrock, featuring in
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Streamlit UI                          │
-└────────────────────┬────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│              Supervisor Agent                            │
-│         (Intelligent Request Routing)                    │
-└─────┬──────────────┬──────────────┬─────────────────────┘
-      │              │              │
-┌─────▼─────┐  ┌────▼─────┐  ┌────▼─────┐
-│  Weather  │  │  Stock   │  │   News   │
-│   Agent   │  │  Agent   │  │  Agent   │
-└─────┬─────┘  └────┬─────┘  └────┬─────┘
-      │              │              │
-┌─────▼──────────────▼──────────────▼─────┐
-│         AWS Lambda Functions             │
-└──────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                      Streamlit UI                            │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────┐
+│                   Supervisor Agent                           │
+│            (Intelligent Request Routing + RAG)               │
+└────┬─────────────┬──────────────┬──────────────┬────────────┘
+     │             │              │              │
+     │       ┌─────▼─────┐  ┌────▼─────┐  ┌────▼─────┐
+     │       │  Weather  │  │  Stock   │  │   News   │
+     │       │   Agent   │  │  Agent   │  │  Agent   │
+     │       └─────┬─────┘  └────┬─────┘  └────┬─────┘
+     │             │              │              │
+     │       ┌─────▼──────────────▼──────────────▼─────┐
+     │       │         AWS Lambda Functions             │
+     │       └──────────────────────────────────────────┘
+     │
+     │ (RAG Queries)
+     │
+┌────▼────────────────────────────────────────────────────────┐
+│                    Knowledge Base                            │
+│              (Retrieval Augmented Generation)                │
+└────┬────────────────────────┬────────────────────────────────┘
+     │                        │
+┌────▼──────┐          ┌──────▼────────┐
+│ S3 Bucket │          │   OpenSearch  │
+│(Documents)│          │  Serverless   │
+│           │          │   (Vectors)   │
+└───────────┘          └───────────────┘
 ```
 
 ## 📋 Prerequisites
@@ -73,7 +86,10 @@ This will:
 - Deploy Lambda functions
 - Create OpenSearch collection
 - Set up Knowledge Base
+- Upload sample data to Knowledge Base (from `data/` directory)
+- Sync Knowledge Base to ingest documents
 - Deploy all agents (supervisor + collaborators)
+- Associate Knowledge Base with supervisor agent
 - Associate collaborators with supervisor
 
 ### 4. Run the Streamlit App
@@ -83,6 +99,58 @@ streamlit run streamlit_app.py
 ```
 
 Open your browser to `http://localhost:8501`
+
+## 📚 Knowledge Base
+
+The system includes a comprehensive Knowledge Base with sample documentation that enables RAG (Retrieval Augmented Generation) capabilities.
+
+### Sample Documents
+
+Located in the `data/` directory:
+
+1. **sample_kb_data.txt** (145 lines)
+   - System architecture and overview
+   - Agent capabilities and use cases
+   - AWS services and configuration
+   - Best practices and troubleshooting
+
+2. **agent_capabilities.txt** (200 lines)
+   - Detailed agent features and examples
+   - Query patterns and responses
+   - Integration patterns
+   - Performance metrics
+
+3. **aws_bedrock_guide.txt** (350 lines)
+   - Comprehensive Bedrock documentation
+   - Foundation models overview
+   - Multi-agent collaboration modes
+   - IAM permissions and security
+
+4. **faq.txt** (250 lines)
+   - Frequently asked questions
+   - Setup and configuration help
+   - Troubleshooting common issues
+   - Cost optimization tips
+
+### Knowledge Base Queries
+
+The supervisor agent can answer questions using the knowledge base:
+
+```
+"How does the multi-agent system work?"
+"What agents are available?"
+"How do I troubleshoot errors?"
+"What are the best practices for knowledge bases?"
+"How much does this system cost to run?"
+```
+
+### Adding Your Own Documents
+
+1. Place documents in the `data/` directory (TXT, PDF, DOCX, HTML, MD)
+2. Run deployment: `python main.py deploy`
+3. Documents are automatically uploaded and indexed
+
+See `data/README.md` for detailed documentation guidelines.
 
 ## 📁 Project Structure
 

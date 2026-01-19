@@ -158,19 +158,23 @@ class MultiAgentOrchestrator:
         
         collection_name = self.config.kb.collection_name
         
-        # Create security policies
+        # Create security policies with shortened names (max 32 chars)
+        # Use timestamp suffix to ensure uniqueness
+        import time
+        suffix = str(int(time.time()))[-6:]  # Last 6 digits of timestamp
+        
         self.opensearch_mgr.create_encryption_policy(
-            f"{collection_name}-encryption",
+            f"kb-encrypt-{suffix}",
             collection_name
         )
         
         self.opensearch_mgr.create_network_policy(
-            f"{collection_name}-network",
+            f"kb-network-{suffix}",
             collection_name
         )
         
         self.opensearch_mgr.create_data_access_policy(
-            f"{collection_name}-access",
+            f"kb-access-{suffix}",
             collection_name,
             kb_role_arn
         )
@@ -474,6 +478,47 @@ class MultiAgentOrchestrator:
         
         logger.info(f"✅ Supervisor prepared with alias: {supervisor_alias_id}")
     
+    def sync_knowledge_base(self, kb_id: str, data_source_id: Optional[str] = None) -> str:
+        """
+        Sync Knowledge Base to ingest documents
+        
+        Args:
+            kb_id: Knowledge Base ID
+            data_source_id: Optional data source ID (will get first if not provided)
+            
+        Returns:
+            Ingestion job ID
+        """
+        try:
+            # Get data source ID if not provided
+            if not data_source_id:
+                response = self.kb_mgr.client.list_data_sources(
+                    knowledgeBaseId=kb_id,
+                    maxResults=1
+                )
+                if not response.get('dataSourceSummaries'):
+                    raise ValueError(f"No data sources found for Knowledge Base {kb_id}")
+                data_source_id = response['dataSourceSummaries'][0]['dataSourceId']
+            
+            # Ensure data_source_id is not None
+            if not data_source_id:
+                raise ValueError("Data source ID could not be determined")
+            
+            # Start ingestion job
+            logger.info(f"Starting ingestion job for KB {kb_id}, data source {data_source_id}")
+            job_id = self.kb_mgr.start_ingestion_job(kb_id, data_source_id)
+            
+            # Wait for completion
+            logger.info("Waiting for ingestion to complete...")
+            self.kb_mgr.wait_for_ingestion_job(kb_id, data_source_id, job_id)
+            
+            logger.info(f"✅ Knowledge Base sync completed: {job_id}")
+            return job_id
+            
+        except Exception as e:
+            logger.error(f"Failed to sync Knowledge Base: {e}")
+            raise
+    
     def deploy_complete_system(
         self,
         collaborator_configs: List[CollaboratorConfig],
@@ -529,10 +574,21 @@ class MultiAgentOrchestrator:
             collaborator_configs
         )
         
-        # Step 8: Associate collaborators with supervisor
+        # Step 8: Associate Knowledge Base with supervisor
+        logger.info("=" * 60)
+        logger.info("Associating Knowledge Base with supervisor...")
+        logger.info("=" * 60)
+        self.agent_mgr.associate_knowledge_base(
+            supervisor_id,
+            kb_id,
+            self.config.kb.kb_agent_description
+        )
+        logger.info(f"✅ Knowledge Base associated with supervisor")
+        
+        # Step 9: Associate collaborators with supervisor
         self.associate_collaborators_with_supervisor(supervisor_id, collaborators)
         
-        # Step 9: Upload data to KB if requested
+        # Step 10: Upload data to KB if requested
         if upload_data_to_kb and data_directory:
             logger.info("=" * 60)
             logger.info("Uploading data to Knowledge Base...")
@@ -544,6 +600,13 @@ class MultiAgentOrchestrator:
                 self.config.kb.data_source_prefix
             )
             logger.info(f"✅ Uploaded {count} files to Knowledge Base")
+            
+            # Sync Knowledge Base
+            logger.info("=" * 60)
+            logger.info("Syncing Knowledge Base...")
+            logger.info("=" * 60)
+            self.sync_knowledge_base(kb_id)
+            logger.info(f"✅ Knowledge Base synced successfully")
         
         elapsed_time = time.time() - start_time
         

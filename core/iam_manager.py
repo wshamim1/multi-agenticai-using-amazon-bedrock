@@ -203,6 +203,15 @@ class IAMManager:
                         "bedrock:ListAgentAliases"
                     ],
                     "Resource": "*"
+                },
+                {
+                    "Sid": "BedrockKnowledgeBaseAccess",
+                    "Effect": "Allow",
+                    "Action": [
+                        "bedrock:Retrieve",
+                        "bedrock:RetrieveAndGenerate"
+                    ],
+                    "Resource": "*"
                 }
             ]
         }

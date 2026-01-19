@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 
 def deploy_system(
     collaborators: list,
-    upload_data: bool = False,
-    data_dir: str = None
+    upload_data: bool = True,
+    data_dir: str = "data"
 ):
     """
     Deploy the complete multi-agent system
@@ -130,12 +130,20 @@ def main():
     deploy_parser.add_argument(
         '--upload-data',
         action='store_true',
-        help='Upload data to Knowledge Base'
+        default=True,
+        help='Upload data to Knowledge Base (default: True)'
+    )
+    deploy_parser.add_argument(
+        '--no-upload-data',
+        action='store_false',
+        dest='upload_data',
+        help='Skip uploading data to Knowledge Base'
     )
     deploy_parser.add_argument(
         '--data-dir',
         type=str,
-        help='Directory containing data to upload'
+        default='data',
+        help='Directory containing data to upload (default: data)'
     )
     deploy_parser.add_argument(
         '--disable-weather',
