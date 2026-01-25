@@ -546,4 +546,3 @@ class OpenSearchManager:
             logger.error(f"Failed to get collection info: {e}")
             return None
 
-# Made with Bob

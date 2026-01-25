@@ -466,4 +466,3 @@ class StorageManager:
             logger.error(f"Failed to get object metadata: {e}")
             raise
 
-# Made with Bob

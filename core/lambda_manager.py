@@ -506,4 +506,3 @@ def lambda_handler(event, context):
             logger.error(f"Failed to list Lambda functions: {e}")
             raise
 
-# Made with Bob

@@ -250,4 +250,3 @@ if __name__ == "__main__":
     # Test configuration
     config.print_summary()
 
-# Made with Bob
